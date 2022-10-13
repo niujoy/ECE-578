@@ -10,3 +10,22 @@ class SingleDomain:
 
 
         # outputs: throughput, rate
+
+'''
+Single Collision Domain:
+A ----> B
+C ----> D
+
+Send DIFS to sense other channels
+Count backoff 
+assume Channel A has lowest backoff --> transmit (C channel pauses count)
+Send data, SIFS, ACK on A
+
+IF backoffs the same
+    reset and double CW
+
+'''
+
+def SingleCollisionDCF( L ):
+    Acount = 0
+    Ccount = 0
