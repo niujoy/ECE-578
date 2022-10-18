@@ -2,6 +2,7 @@ import numpy as np
 import math
 
 
+
 class SingleDomain:
     def __init__(self, DIFS, SIFS, backoff1, backoff2, ACK, frame):
         self.DIFS = 4

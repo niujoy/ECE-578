@@ -1,12 +1,11 @@
+
 import numpy as np
 import math
 
 from Node import Node, State, Channel
 from Calculations import calcFairnessIndex, calcThroughputBits
 
-
-
-def HiddenTerminalVCS(parameters, FrameRate):
+def SingleCollisionVCS(parameters,FrameRate):
     A = Node(parameters, FrameRate, seed=3)
     C = Node(parameters, FrameRate, seed=5)
     channel = Channel(parameters)
@@ -14,7 +13,7 @@ def HiddenTerminalVCS(parameters, FrameRate):
     NumASuccesses = 0
     NumCSuccesses = 0
 
-    # number of slots for 10 seconds
+    #number of slots for 10 seconds
     MaxSlots = math.ceil(parameters.MaxTime/parameters.SlotDuration_us)
     
     for slot in range(0, MaxSlots):
@@ -25,7 +24,7 @@ def HiddenTerminalVCS(parameters, FrameRate):
             channel.idle_count -= 1
             if channel.idle_count <= 0:
                 channel.is_idle = True
-                channel.idle_count = parameters.FrameSize + parameters.SIFS + parameters.ACK + 2 + 2 + 1 + 1
+                channel.idle_count = parameters.frame_size_slots + parameters.SIFS_dur + parameters.ACK_dur + 2 + 2 +  1 + 1
                 if A.state == State.transmit:
                     A.state = State.idle
                 if C.state == State.transmit:
@@ -33,15 +32,15 @@ def HiddenTerminalVCS(parameters, FrameRate):
             continue
         if A.state == State. readyTransmit:
             if A.backoff is None:
-                A.calcBackoff()
-            A.state = State.waitTransmit
+                A. calcBackoff()
+            A.state = State. waitTransmit
     
         if C.state == State. readyTransmit:
             if C.backoff is None:
-                C.calcBackoff()
-            C.state = State.waitTransmit
+                C. calcBackoff()
+            C.state = State. waitTransmit
         
-        if A.state == State.waitTransmit:
+        if A.state == State. waitTransmit:
             #wait until channel is idle for DIFS slots
             if channel.is_idle:
                 A.difs_duration -= 1
@@ -55,13 +54,13 @@ def HiddenTerminalVCS(parameters, FrameRate):
                         #send RTS + NAV
                         A.state = State.transmit
         
-        if C.state == State.waitTransmit:
+        if C.state == State. waitTransmit:
             if channel.is_idle:
                 C.difs_duration -= 1
             else:
                 C.difs_duration = 2
             if C.difs_duration <= 0:
-                #decrement backoff slots
+                # decrement backoff slots
                 if channel.is_idle:
                     C.backoff -= 1
                     if C.backoff <= 0:
