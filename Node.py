@@ -28,12 +28,12 @@ class Node:
         # parameter dependent
         self.ack = parameters.ACK
         self.backoff = None
-        self.DIFS_duration = parameters.DIFS
+        self.difs_duration = parameters.DIFS
         self.cw_min= parameters.CW_min
         self.cw_max = parameters.CW_max
         self.cw = self.cw_min
-        self.SIFS_duration = parameters.SIFS
-        self.FrameDistribution = self.calcDistribution(FrameRate,parameters.max_sim_time_sec)
+        self.sifs_duration = parameters.SIFS
+        self.FrameDistribution = self.calcDistribution(FrameRate,parameters.MaxTime)
 
         self.FrameIndex = 0
         self.state = State.idle
@@ -78,11 +78,11 @@ class Node:
         self.cw = self.cw * 2
         self.backoff = None
         self.valid = True
-        self.DIFS_duration = 2
+        self.difs_duration = 4
     
     def reset(self):
         self.state = State.idle
         self.cw = self.cw_min
         self.backoff = None
         self.valid = True
-        self.DIFS_duration = 2
+        self.difs_duration = 4

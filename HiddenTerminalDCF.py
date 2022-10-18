@@ -50,6 +50,10 @@ def HiddenTerminalDCF(parameters, FrameRate):
                     C.state = State.transmit
                     C.transmit_count = C.calcTransmit(parameters)
                     
+        if A.state == State.transmit:
+            A.transmit_count -= 1
+        if C.state == State.transmit:
+            C.transmit_count -= 1
 
         if A.state == State.transmit and C.state == State.transmit:
             if A.valid or C.valid:
@@ -58,7 +62,6 @@ def HiddenTerminalDCF(parameters, FrameRate):
                 NumCollisions += 1
 
         if A.state == State.transmit:
-            A.transmit_count -= 1
             if A.transmit_count <= 0:
                 if A.valid:
                    NumASuccesses += 1
@@ -68,7 +71,6 @@ def HiddenTerminalDCF(parameters, FrameRate):
                     A.collision()
                    
         if C.state == State.transmit:
-            C.transmit_count -= 1
             if C.transmit_count <= 0:
                 if C.valid:
                     NumCSuccesses += 1

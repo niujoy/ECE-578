@@ -46,7 +46,7 @@ def HiddenTerminalVCS(parameters, FrameRate):
             if channel.is_idle:
                 A.difs_duration -= 1
             else:
-                A.difs_duration = 2
+                A.difs_duration = 4
             if A.difs_duration <= 0:
                 #decrement backoff slots
                 if channel.is_idle:
@@ -74,11 +74,11 @@ def HiddenTerminalVCS(parameters, FrameRate):
             A.cw = A.cw * 2
             A.backoff = None
             A.state = State.idle
-            A.difs_duration = 2
+            A.difs_duration = 4
             C.cw = C.cw * 2
             C.backoff = None
             C.state = State.idle
-            C.difs_duration = 2
+            C.difs_duration = 4
         elif A.state == State.transmit and not C.state == State.transmit:
             channel.is_idle = False
             A.backoff = None
@@ -86,8 +86,8 @@ def HiddenTerminalVCS(parameters, FrameRate):
             A.cw = A.cw_min
             C.cw = C.cw_min
             A.queue.get()
-            A.difs_duration = 2
-            C.difs_duration = 2
+            A.difs_duration = 4
+            C.difs_duration = 4
 
         elif not A.state == State.transmit and C.state == State.transmit:
             channel.is_idle = False
@@ -96,8 +96,8 @@ def HiddenTerminalVCS(parameters, FrameRate):
             A.cw = A.cw_min
             C.cw = C.cw_min
             C.queue.get()
-            A.difs_duration = 2
-            C.difs_duration = 2
+            A.difs_duration = 4
+            C.difs_duration = 4
                    
     AThroughputBits = calcThroughputBits(NumASuccesses,
                                     parameters.FrameSizeByte,

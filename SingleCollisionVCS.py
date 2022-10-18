@@ -24,28 +24,28 @@ def SingleCollisionVCS(parameters,FrameRate):
             channel.idle_count -= 1
             if channel.idle_count <= 0:
                 channel.is_idle = True
-                channel.idle_count = parameters.frame_size_slots + parameters.SIFS_dur + parameters.ACK_dur + 2 + 2 +  1 + 1
+                channel.idle_count = parameters.FrameSize + parameters.SIFS + parameters.ACK + 2 + 2 + 1 + 1
                 if A.state == State.transmit:
                     A.state = State.idle
                 if C.state == State.transmit:
                     C.state = State.idle
             continue
-        if A.state == State. readyTransmit:
+        if A.state == State.readyTransmit:
             if A.backoff is None:
                 A. calcBackoff()
-            A.state = State. waitTransmit
+            A.state = State.waitTransmit
     
-        if C.state == State. readyTransmit:
+        if C.state == State.readyTransmit:
             if C.backoff is None:
                 C. calcBackoff()
-            C.state = State. waitTransmit
+            C.state = State.waitTransmit
         
-        if A.state == State. waitTransmit:
+        if A.state == State.waitTransmit:
             #wait until channel is idle for DIFS slots
             if channel.is_idle:
                 A.difs_duration -= 1
             else:
-                A.difs_duration = 2
+                A.difs_duration = 4
             if A.difs_duration <= 0:
                 #decrement backoff slots
                 if channel.is_idle:
@@ -54,11 +54,11 @@ def SingleCollisionVCS(parameters,FrameRate):
                         #send RTS + NAV
                         A.state = State.transmit
         
-        if C.state == State. waitTransmit:
+        if C.state == State.waitTransmit:
             if channel.is_idle:
                 C.difs_duration -= 1
             else:
-                C.difs_duration = 2
+                C.difs_duration = 4
             if C.difs_duration <= 0:
                 # decrement backoff slots
                 if channel.is_idle:
@@ -73,11 +73,11 @@ def SingleCollisionVCS(parameters,FrameRate):
             A.cw = A.cw * 2
             A.backoff = None
             A.state = State.idle
-            A.difs_duration = 2
+            A.difs_duration = 4
             C.cw = C.cw * 2
             C.backoff = None
             C.state = State.idle
-            C.difs_duration = 2
+            C.difs_duration = 4
         elif A.state == State.transmit and not C.state == State.transmit:
             channel.is_idle = False
             A.backoff = None
@@ -85,8 +85,8 @@ def SingleCollisionVCS(parameters,FrameRate):
             A.cw = A.cw_min
             C.cw = C.cw_min
             A.queue.get()
-            A.difs_duration = 2
-            C.difs_duration = 2
+            A.difs_duration = 4
+            C.difs_duration = 4
 
         elif not A.state == State.transmit and C.state == State.transmit:
             channel.is_idle = False
@@ -95,8 +95,8 @@ def SingleCollisionVCS(parameters,FrameRate):
             A.cw = A.cw_min
             C.cw = C.cw_min
             C.queue.get()
-            A.difs_duration = 2
-            C.difs_duration = 2
+            A.difs_duration = 4
+            C.difs_duration = 4
                    
     AThroughputBits = calcThroughputBits(NumASuccesses,
                                     parameters.FrameSizeByte,
